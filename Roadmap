@@ -1,0 +1,201 @@
+🪜 ETAPA 1 — DOCUMENTAÇÃO (ANTES DE CODAR)
+🎯 Objetivo:
+
+Pensar como arquiteto, não como codador.
+
+🧩 1.1 — Descrição do sistema (curta)
+
+Você vai escrever:
+
+O que o sistema faz
+Quem usa
+Qual problema resolve
+📊 1.2 — MER (Modelo Entidade-Relacionamento)
+
+Você deve desenhar:
+
+Entidades:
+
+Livro
+Usuario
+Emprestimo
+
+Relacionamentos:
+
+Usuario 1:N Emprestimo
+Livro 1:N Emprestimo
+🔁 1.3 — Fluxograma do sistema
+
+Fluxo básico:
+
+Início
+Menu
+Escolha
+Ação (cadastrar / emprestar / devolver)
+Volta pro menu
+Sair
+📌 ENTREGA DA ETAPA 1:
+Descrição escrita
+MER (pode ser texto ou imagem)
+Fluxograma (pode ser simples)
+🪜 ETAPA 2 — MODELAGEM DE CLASSES (SEM CÓDIGO COMPLETO)
+🎯 Objetivo:
+
+Pensar em POO corretamente
+
+🧱 2.1 — Criar classes:
+
+Você vai definir:
+
+📚 Livro
+
+Atributos + métodos
+
+👤 Usuario (classe base)
+👨‍🎓 Aluno
+👨‍🏫 Professor
+🔄 Emprestimo
+📌 2.2 — Para cada classe, definir:
+Atributos (tipo correto)
+Métodos (nomes e responsabilidades)
+Modificador de acesso (private, public)
+📌 ENTREGA DA ETAPA 2:
+Lista de classes
+Estrutura de cada classe (sem implementar lógica ainda)
+🪜 ETAPA 3 — ENCAPSULAMENTO + HERANÇA
+🎯 Objetivo:
+
+Aplicar fundamentos de POO
+
+📌 Você deve:
+Tornar atributos private
+Criar getters e setters
+Implementar herança:
+Usuario → Aluno / Professor
+💡 Diferencial:
+Pensar se cada tipo terá comportamento diferente
+📌 ENTREGA DA ETAPA 3:
+Classes estruturadas com encapsulamento
+Herança funcionando
+🪜 ETAPA 4 — REGRAS DE NEGÓCIO
+🎯 Objetivo:
+
+O sistema começa a “pensar”
+
+📌 Implementar:
+Emprestar livro
+Devolver livro
+⚠️ Regras obrigatórias:
+Não emprestar livro já emprestado
+Atualizar status do livro
+Validar existência de usuário e livro
+📌 ENTREGA DA ETAPA 4:
+Lógica funcionando (pode ser sem menu ainda)
+🪜 ETAPA 5 — CLASSE SERVICE (ARQUITETURA LIMPA)
+🎯 Objetivo:
+
+Separar responsabilidades
+
+📌 Criar:
+📦 BibliotecaService
+
+Responsável por:
+
+cadastrarLivro
+cadastrarUsuario
+emprestarLivro
+devolverLivro
+listar
+⚠️ REGRA:
+❌ Nada de lógica no main
+❌ Nada de regra dentro das entidades
+📌 ENTREGA DA ETAPA 5:
+Service central funcionando
+🪜 ETAPA 6 — MENU (INTERAÇÃO)
+🎯 Objetivo:
+
+Controlar o sistema
+
+📌 Criar:
+Classe Main
+while para loop
+switch-case para opções
+💡 REGRA IMPORTANTE:
+
+👉 O main só chama o service
+
+📌 ENTREGA DA ETAPA 6:
+Sistema rodando no console
+🪜 ETAPA 7 — REFATORAÇÃO (PRIMEIRA)
+🎯 Objetivo:
+
+Melhorar qualidade
+
+📌 Você vai:
+Melhorar nomes
+Remover duplicações
+Organizar pacotes:
+model/
+service/
+main/
+🪜 ETAPA 8 — MYSQL (BANCO DE DADOS)
+🎯 Objetivo:
+
+Persistência real
+
+📌 Criar:
+Banco MySQL
+Tabelas
+Classe de conexão
+📦 Criar camada:
+repository/
+📌 Repositories:
+LivroRepository
+UsuarioRepository
+EmprestimoRepository
+📌 ENTREGA:
+CRUD funcionando com banco
+🪜 ETAPA 9 — JAVAFX (INTERFACE)
+🎯 Objetivo:
+
+Interface profissional
+
+📦 Estrutura:
+view/
+controller/
+📌 Criar:
+Tela de livros
+Tela de usuários
+Tela de empréstimos
+🪜 ETAPA 10 — REFATORAÇÃO FINAL (NÍVEL PRO)
+🎯 Objetivo:
+
+Código limpo de verdade
+
+📌 Aplicar:
+SOLID
+Interfaces
+Separação total de camadas
+🔁 COMO VAI FUNCIONAR COMIGO
+
+A partir de agora:
+
+👉 Você diz:
+“Etapa 1 concluída”
+
+👉 Me manda:
+
+texto / print / código
+
+👉 Eu faço:
+
+Code review PROFISSIONAL
+Aponto erros
+Sugiro melhorias
+Só libero próxima etapa quando estiver bom
+🧠 RESULTADO FINAL
+
+Se seguir isso:
+
+Você não vai só aprender Java…
+👉 Você vai pensar como um desenvolvedor profissional
