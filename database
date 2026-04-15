@@ -1,0 +1,86 @@
+create database AlLibrary;
+# Criando tables
+CREATE TABLE usuario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    tipo ENUM('ALUNO', 'PROFESSOR') NOT NULL
+);
+CREATE TABLE livro (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(150) NOT NULL,
+    autor VARCHAR(100),
+    ano INT,
+    status ENUM('DISPONIVEL', 'EMPRESTADO') DEFAULT 'DISPONIVEL'
+);
+CREATE TABLE emprestimo (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_livro INT NOT NULL,
+    data_emprestimo DATE NOT NULL,
+    data_devolucao DATE,
+
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id),
+    FOREIGN KEY (id_livro) REFERENCES livro(id)
+);
+# Usando Trigger para delimitar quantidades
+DELIMITER $$
+
+CREATE TRIGGER before_emprestimo_insert
+BEFORE INSERT ON emprestimo
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM emprestimo
+        WHERE id_livro = NEW.id_livro
+        AND data_devolucao IS NULL
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Livro já está emprestado!';
+    END IF;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER after_emprestimo_insert
+AFTER INSERT ON emprestimo
+FOR EACH ROW
+BEGIN
+    UPDATE livro
+    SET status = 'EMPRESTADO'
+    WHERE id = NEW.id_livro;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER after_emprestimo_update
+AFTER UPDATE ON emprestimo
+FOR EACH ROW
+BEGIN
+    IF NEW.data_devolucao IS NOT NULL THEN
+        UPDATE livro
+        SET status = 'DISPONIVEL'
+        WHERE id = NEW.id_livro;
+    END IF;
+END$$
+
+DELIMITER ;
+# inserir aluno
+INSERT INTO usuario (nome, tipo)
+VALUES ('Augusto Cury', 'ALUNO');
+
+# inserir Livro
+INSERT INTO livro (titulo, autor, ano)
+VALUES ('Os Miseráveis', 'Victor Hugo', 1999);
+
+# emprestar livro
+INSERT INTO emprestimo (id_usuario, id_livro, data_emprestimo)
+VALUES (1, 1, CURDATE());
+
+# Devolver livro
+UPDATE emprestimo
+SET data_devolucao = CURDATE()
+WHERE id = 1;
