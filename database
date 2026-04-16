@@ -1,28 +1,38 @@
-create database AlLibrary;
-# Criando tables
+#  SCRIPT COMPLETO (VERSÃO FINAL)
+# 1. Criar banco
+DROP DATABASE IF EXISTS AlLibrary;
+CREATE DATABASE AlLibrary;
+USE AlLibrary;
+# 2. Tabela USUARIO
 CREATE TABLE usuario (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     tipo ENUM('ALUNO', 'PROFESSOR') NOT NULL
 );
+# 3. Tabela LIVRO (SEM status ❗)
 CREATE TABLE livro (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(150) NOT NULL,
     autor VARCHAR(100),
-    ano INT,
-    status ENUM('DISPONIVEL', 'EMPRESTADO') DEFAULT 'DISPONIVEL'
+    ano INT
 );
+# 4. Tabela EMPRESTIMO
 CREATE TABLE emprestimo (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL,
     id_livro INT NOT NULL,
     data_emprestimo DATE NOT NULL,
+    data_prevista DATE NOT NULL,
     data_devolucao DATE,
 
     FOREIGN KEY (id_usuario) REFERENCES usuario(id),
     FOREIGN KEY (id_livro) REFERENCES livro(id)
 );
-# Usando Trigger para delimitar quantidades
+# 5. Índices (performance)
+CREATE INDEX idx_livro_titulo ON livro(titulo);
+CREATE INDEX idx_emprestimo_livro ON emprestimo(id_livro);
+CREATE INDEX idx_emprestimo_usuario ON emprestimo(id_usuario);
+# 6. TRIGGER — impedir livro já emprestado
 DELIMITER $$
 
 CREATE TRIGGER before_emprestimo_insert
@@ -35,52 +45,86 @@ BEGIN
         AND data_devolucao IS NULL
     ) THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Livro já está emprestado!';
+        SET MESSAGE_TEXT = 'Livro já está emprestado';
     END IF;
 END$$
 
 DELIMITER ;
-
+# 7. TRIGGER — limite por usuário
 DELIMITER $$
 
-CREATE TRIGGER after_emprestimo_insert
-AFTER INSERT ON emprestimo
+CREATE TRIGGER limite_emprestimo
+BEFORE INSERT ON emprestimo
 FOR EACH ROW
 BEGIN
-    UPDATE livro
-    SET status = 'EMPRESTADO'
-    WHERE id = NEW.id_livro;
-END$$
+    DECLARE total INT;
+    DECLARE tipo_usuario VARCHAR(20);
+    DECLARE limite INT;
 
-DELIMITER ;
+    SELECT tipo INTO tipo_usuario
+    FROM usuario
+    WHERE id = NEW.id_usuario;
 
-DELIMITER $$
+    IF tipo_usuario = 'ALUNO' THEN
+        SET limite = 3;
+    ELSE
+        SET limite = 5;
+    END IF;
 
-CREATE TRIGGER after_emprestimo_update
-AFTER UPDATE ON emprestimo
-FOR EACH ROW
-BEGIN
-    IF NEW.data_devolucao IS NOT NULL THEN
-        UPDATE livro
-        SET status = 'DISPONIVEL'
-        WHERE id = NEW.id_livro;
+    SELECT COUNT(*) INTO total
+    FROM emprestimo
+    WHERE id_usuario = NEW.id_usuario
+    AND data_devolucao IS NULL;
+
+    IF total >= limite THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Limite de empréstimos atingido';
     END IF;
 END$$
 
 DELIMITER ;
-# inserir aluno
-INSERT INTO usuario (nome, tipo)
-VALUES ('Augusto Cury', 'ALUNO');
+# 8. VIEW — livros disponíveis
+CREATE VIEW livros_disponiveis AS
+SELECT *
+FROM livro l
+WHERE NOT EXISTS (
+    SELECT 1 FROM emprestimo e
+    WHERE e.id_livro = l.id
+    AND e.data_devolucao IS NULL
+);
+# 9. DADOS DE TESTE
+# Usuários
+INSERT INTO usuario (nome, tipo) VALUES 
+('Ana', 'ALUNO'),
+('Carlos', 'PROFESSOR');
+# Livros
+INSERT INTO livro (titulo, autor, ano) VALUES 
+('1984', 'George Orwell', 1949),
+('Dom Casmurro', 'Machado de Assis', 1899);
+# Empréstimo válido
+INSERT INTO emprestimo (id_usuario, id_livro, data_emprestimo, data_prevista)
+VALUES (1, 1, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 7 DAY));
+# 10. TESTES IMPORTANTES
 
-# inserir Livro
-INSERT INTO livro (titulo, autor, ano)
-VALUES ('Os Miseráveis', 'Victor Hugo', 1999);
+# Tentar emprestar o mesmo livro
+# Deve dar erro
 
-# emprestar livro
-INSERT INTO emprestimo (id_usuario, id_livro, data_emprestimo)
-VALUES (1, 1, CURDATE());
-
+INSERT INTO emprestimo (id_usuario, id_livro, data_emprestimo, data_prevista)
+VALUES (2, 1, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 7 DAY));
+# Ver livros disponíveis
+SELECT * FROM livros_disponiveis;
 # Devolver livro
 UPDATE emprestimo
-SET data_devolucao = CURDATE()
-WHERE id = 1;
+SET data_devolucao = CURDATE();
+
+## Agora deve aparecer disponível
+
+SELECT * FROM livros_disponiveis;
+# Ver multas (atraso)
+
+SELECT 
+    id,
+    DATEDIFF(CURDATE(), data_prevista) * 2 AS multa
+FROM emprestimo
+WHERE data_devolucao IS NULL
+AND data_prevista < CURDATE();
