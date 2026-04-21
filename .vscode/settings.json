@@ -1,3 +1,10 @@
 {
-    "java.configuration.updateBuildConfiguration": "automatic"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.project.sourcePaths": [
+        "."
+    ],
+    "java.project.referencedLibraries": [
+        "lib\\mysql-connector-j-9.6.0.jar",
+        "c:\\Users\\Casa\\Documents\\GitHub\\ALLibrary\\lib\\mysql-connector-j-9.6.0.jar"
+    ]
 }
