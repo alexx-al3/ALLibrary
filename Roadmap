@@ -1,30 +1,43 @@
 🪜 ETAPA 1 — DOCUMENTAÇÃO (ANTES DE CODAR)
 🎯 Objetivo:
 
+
+::::::IMPORTANTE:::::  
+HOSPEDAR BANCO DE DADOS EM UM IP ONLINE HOSTINGER OU SIMILAR.. (sulfabase)
+
+
 Pensar como arquiteto, não como codador.
 
 🧩 1.1 — Descrição do sistema (curta)
 
 Você vai escrever:
+O sistema Consiste  em uma aplicação de gerenciamentto de biblioteca,
+com o objetivo de facilitar o controle de acervo e usuarios.
 
-O que o sistema faz
-Quem usa
-Qual problema resolve
+a aplicação permitirá:
+-Cadastro de Livros
+-Cadastro de usuarios
+-Controle de emprestimos
+-registro de devoluções
+
+O sistema será responsavel por Manter a Organização dos dados e 
+garantir o controle sobre quais livros estão emprestados, 
+disponíveis ou em atraso.
+
+Objetivo:
+Centralizar e automatizar o controle de uma biblíoteca substituindo
+processos manuais por um sistema digital e inteligente.
+
+Funcionalidades:
+Gerenciar livros e usuarios (cadastrar, listar, atualizar e remover)
+registrar empréstimos
+registrar devoluções
+Controlar prazos e estatus deos emprestimos.
+
 📊 1.2 — MER (Modelo Entidade-Relacionamento)
 
-Você deve desenhar:
+Modelagem criada
 
-Entidades:
-
-Livro
-Usuario
-Emprestimo
-
-Relacionamentos:
-
-Usuario 1:N Emprestimo
-Livro 1:N Emprestimo
-🔁 1.3 — Fluxograma do sistema
 
 Fluxo básico:
 
