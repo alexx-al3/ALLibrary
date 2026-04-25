@@ -20,16 +20,3 @@ public class Main {
     }
 }
 
-public class Main {
-    public static void main(String[] args) {
-
-        Usuario user = new Usuario("João", "123456789");
-        Livro livro = new Livro("Java Básico", "Autor X");
-
-        Emprestimo emp = new Emprestimo(user, livro);
-
-        user.exibirUsuario();
-        emp.realizarEmprestimo();
-        livro.devolver();
-    }
-}

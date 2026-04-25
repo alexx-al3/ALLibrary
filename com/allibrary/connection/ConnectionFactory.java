@@ -6,9 +6,11 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/allibrary?useSSL=false&serverTimezone=UTC";
-    private static final String USER = "root";
-    private static final String PASSWORD = "root";
+    private static final String URL =
+        "jdbc:postgresql://db.wozwfhzjaafudukrlkln.supabase.co:5432/postgres?sslmode=require";
+
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "bancodedadosalex";
 
     public static Connection getConnection() {
         try {
