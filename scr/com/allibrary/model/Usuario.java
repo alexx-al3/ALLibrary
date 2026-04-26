@@ -1,4 +1,4 @@
-package Class;
+package com.allibrary.model;
 
 public class Usuario extends Pessoa {
 
