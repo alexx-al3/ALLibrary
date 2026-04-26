@@ -1,7 +1,8 @@
 {
     "java.configuration.updateBuildConfiguration": "automatic",
     "java.project.sourcePaths": [
-        "scr/com/allibrary/Main"
+        "scr/com/allibrary/Main",
+        "src/com/allibrary/main"
     ],
     "java.project.referencedLibraries": [
         "lib\\*.jar"
