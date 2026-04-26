@@ -1,4 +1,4 @@
-package com.allibrary.Main;
+package com.allibrary.main;
 
 import com.allibrary.connection.ConnectionFactory;
 import java.sql.Connection;
